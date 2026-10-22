@@ -15,6 +15,7 @@
   const state = { count: 16, loser: -1, active: false, sound: true, opened: 0 };
   const faces = ['🙂', '😐', '🫤', '😏', '🤨', '😑'];
   const customImages = ['assets/sini-normal.png'];
+  let sharedAudioContext = null;
 
   function columnsFor(count) { return Math.sqrt(count); }
 
@@ -72,6 +73,7 @@
     if (!state.active) return;
     const tile = event.currentTarget;
     const index = Number(tile.dataset.index);
+    clickSound();
     if (index === state.loser) {
       state.active = false;
       tile.innerHTML = faceMarkup(index, true);
@@ -84,26 +86,35 @@
     state.opened += 1;
     tile.classList.add('revealed');
     statusText.textContent = `נשארו ${state.count - state.opened} פרצופים…`;
-    ping(560, .045);
     if (state.sound && navigator.vibrate) navigator.vibrate(24);
   }
 
   function audioContext() {
-    return new (window.AudioContext || window.webkitAudioContext)();
+    if (!sharedAudioContext) {
+      sharedAudioContext = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if (sharedAudioContext.state === 'suspended') sharedAudioContext.resume();
+    return sharedAudioContext;
   }
 
-  function ping(freq, duration) {
+  function clickSound() {
+    if (!state.sound) return;
+    ping(720, .075, .18, 'square');
+    setTimeout(() => ping(520, .06, .11, 'sine'), 38);
+  }
+
+  function ping(freq, duration, volume = .12, wave = 'sine') {
     if (!state.sound) return;
     try {
       const ctx = audioContext();
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
       osc.frequency.value = freq;
-      gain.gain.setValueAtTime(.08, ctx.currentTime);
+      osc.type = wave;
+      gain.gain.setValueAtTime(volume, ctx.currentTime);
       gain.gain.exponentialRampToValueAtTime(.001, ctx.currentTime + duration);
       osc.connect(gain).connect(ctx.destination);
       osc.start(); osc.stop(ctx.currentTime + duration);
-      osc.addEventListener('ended', () => ctx.close());
     } catch (_) {}
   }
 
