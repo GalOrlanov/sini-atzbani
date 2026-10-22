@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#6f164f" />
+  <title>סיני עצבני</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="app" aria-live="polite">
+    <header class="wallpaper" aria-hidden="true" id="wallpaper"></header>
+
+    <section class="machine">
+      <div class="machine-top">
+        <div class="title-card">
+          <span class="title-line">סיני</span>
+          <span class="title-line">עצבני</span>
+          <span class="title-face face face--tiny">😠</span>
+        </div>
+      </div>
+
+      <div class="drawer" id="drawer">
+        <div class="grid" id="grid" aria-label="לוח הפרצופים"></div>
+        <div class="empty-state" id="emptyState">בחרו מספר פרצופים ולחצו התחלה</div>
+      </div>
+
+      <section class="controls" id="setupControls">
+        <div class="count-row" role="group" aria-label="מספר פרצופים">
+          <span class="count-label">מספר</span>
+          <button class="count-btn" data-count="9">9</button>
+          <button class="count-btn active" data-count="16">16</button>
+          <button class="count-btn" data-count="25">25</button>
+          <button class="count-btn" data-count="36">36</button>
+        </div>
+
+        <label class="chaos-toggle">
+          <input type="checkbox" id="fakeToggle" />
+          <span>מצב מבלבל: פרצופים שונים</span>
+        </label>
+
+        <button class="primary-btn" id="startBtn">התחלה</button>
+        <button class="secondary-btn" id="soundBtn" aria-pressed="true">🔊 צליל ורטט</button>
+      </section>
+
+      <section class="game-status hidden" id="gameStatus">
+        <p id="statusText">בחרו פרצוף בתורכם…</p>
+        <button class="secondary-btn" id="restartBtn">סיבוב חדש</button>
+      </section>
+    </section>
+
+    <dialog id="loserDialog" class="loser-dialog">
+      <div class="loser-content">
+        <p class="boom">אוי לא!</p>
+        <div class="face face--loser" id="loserFace">😡</div>
+        <h2>הסיני התעצבן!</h2>
+        <p>מי שלחץ — הפסיד 😈</p>
+        <button class="primary-btn" id="playAgainBtn">עוד סיבוב</button>
+      </div>
+    </dialog>
+  </main>
+  <script src="game.js"></script>
+</body>
+</html>
